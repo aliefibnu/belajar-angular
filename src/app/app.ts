@@ -1,10 +1,14 @@
-import { Component, computed, signal } from '@angular/core';
-import { CustomButton } from './custom-button/custom-button';
-import { Counter } from './counter/counter';
+import { Component } from '@angular/core';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { routes } from './app.routes';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  imports: [Counter],
+  imports: [RouterOutlet, RouterModule],
 })
-export class App {}
+export class App {
+  routes = routes.map(
+    ({ path }) => ((path?.charAt(0).toUpperCase() as string) + path?.slice(1)) as string,
+  );
+}

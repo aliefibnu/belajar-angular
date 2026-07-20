@@ -6,7 +6,7 @@ import { CustomButton } from '../custom-button/custom-button';
   imports: [CustomButton],
   templateUrl: './counter.html',
 })
-export class Counter {
+export class CounterPage {
   count = signal(0);
   increment() {
     this.count.update((v) => v + 1);
