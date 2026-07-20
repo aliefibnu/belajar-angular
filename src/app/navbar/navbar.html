@@ -1,0 +1,18 @@
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky w-screen top-0 z-50">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <span class="text-xl font-bold text-indigo-600">Belajar Angular</span>
+
+    <div class="flex gap-1">
+      @for (route of routes; track $index) {
+        <a
+          [routerLink]="route.toLowerCase()"
+          routerLinkActive="bg-indigo-50 text-indigo-700"
+          [routerLinkActiveOptions]="{ exact: route == '' }"
+          class="px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors font-medium"
+        >
+          {{ route || 'Home' }}
+        </a>
+      }
+    </div>
+  </div>
+</nav>
