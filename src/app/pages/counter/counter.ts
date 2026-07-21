@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { CustomButton } from '../custom-button/custom-button';
+import { CustomButton } from '../../components/custom-button/custom-button';
 
 @Component({
   selector: 'app-counter',
   imports: [CustomButton],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './counter.html',
 })
 export class CounterPage {

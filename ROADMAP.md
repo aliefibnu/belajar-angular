@@ -56,7 +56,8 @@
 │  │     // @ts-ignore: Angular Language Service false positive
 changeDetection: ChangeDetectionStrategy.OnPush,
 selector: 'app-user',                 │ │
-│  │   templateUrl: './user.component.html', │ │
+│  │   changeDetection:ChangeDetectionStrategy.OnPush,
+  templateUrl: './user.component.html', │ │
 │  │   styleUrl: './user.component.scss'     │ │
 │  │ })                                      │ │
 │  │ export class UserComponent { ... }      │ │

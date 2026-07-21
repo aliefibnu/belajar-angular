@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { routes } from '../app.routes';
+import { routes } from '../../app.routes';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.html',
 })
 export class Navbar {

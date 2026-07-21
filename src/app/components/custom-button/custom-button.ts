@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 
 @Component({
   selector: 'app-custom-button',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './custom-button.html',
 })
 export class CustomButton {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Todo, TodolistService } from './todolist.service';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
@@ -14,6 +14,7 @@ import {
 @Component({
   selector: 'app-todolist',
   imports: [ReactiveFormsModule, NgIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './todolist.html',
   providers: provideIcons({
     lucideTrash2,
