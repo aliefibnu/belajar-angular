@@ -1,3 +1,29 @@
 <main>
   <h1>Todo List</h1>
+  <form class="" (keydown.enter)="$event.preventDefault()">
+    <label for="">Masukkan Tugas Baru</label>
+    <div class="flex items-center justify-center border border-amber-200 rounded-md w-fit">
+      <input
+        type="text"
+        class="px-2.5 py-1.5 focus:outline-0"
+        id="username"
+        [formControl]="inputControl"
+      />
+      <button
+        class="px-2.5 py-1.5 bg-amber-200 cursor-pointer hover:bg-amber-100 transition-all duration-300"
+        type="button"
+        (click)="(formSubmit)"
+      >
+        Tambah +
+      </button>
+    </div>
+  </form>
+  <div class="todos">
+    <h1>Daftar Todos</h1>
+    <ol>
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <li>{{ item }}. Item</li>
+      }
+    </ol>
+  </div>
 </main>
