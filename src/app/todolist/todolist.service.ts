@@ -6,24 +6,24 @@ import { Injectable } from '@angular/core';
 export class TodolistService {
   STORAGE_KEY = 'todolist';
 
-  getStorage() {
+  getTodos(): Todo[] | [] {
     return JSON.parse(localStorage.getItem(this.STORAGE_KEY) ?? '[]');
   }
 
-  save(fun: (v: Todo[]) => void) {
-    fun(this.getStorage());
+  save(fun: (v: Todo[]) => any) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(fun(this.getTodos())));
   }
 
-  create(value: string) {
-    this.save((v) => v.push({ value, id: v.length }));
+  create({ value }: Omit<Todo, 'id'>) {
+    this.save((v) => v.concat({ value, id: v.length }));
   }
 
   delete(id: Todo['id']) {
     this.save((v) => v.filter((f) => f.id != id));
   }
 
-  formSubmit(e: any) {
-    console.log(e);
+  formSubmit({ value }: Omit<Todo, 'id'>) {
+    this.create({ value });
   }
 }
 

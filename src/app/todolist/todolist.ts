@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TodolistService } from './todolist.service';
 
 @Component({
@@ -7,8 +7,22 @@ import { TodolistService } from './todolist.service';
   imports: [ReactiveFormsModule],
   templateUrl: './todolist.html',
 })
-export class TodolistPage {
-  inputControl = new FormControl('', [Validators.required, Validators.min(3)]);
+export class TodolistPage implements OnInit {
   todoService = inject(TodolistService);
-  formSubmit = this.todoService.formSubmit;
+  formGroup = new FormGroup({
+    tugas: new FormControl('', [Validators.required, Validators.min(3)]),
+  });
+
+  todos = signal<ReturnType<TodolistService['getTodos']>>([]);
+
+  ngOnInit(): void {
+    this.todos.set(this.todoService.getTodos());
+  }
+  formSubmit = () => {
+    if (this.formGroup.invalid && this.formGroup.touched) {
+    } else {
+      this.todoService.formSubmit({ value: this.formGroup.value.tugas ?? '' });
+      this.todos.update(() => this.todoService.getTodos());
+    }
+  };
 }
