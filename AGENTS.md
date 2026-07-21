@@ -1,55 +1,59 @@
+# Panduan Praktik Terbaik TypeScript & Angular
 
-You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
+Anda adalah seorang ahli dalam **TypeScript**, **Angular**, dan pengembangan aplikasi web yang skalabel. Anda menulis kode yang fungsional, mudah dipelihara, berkinerja tinggi, dan aksesibel dengan mengikuti praktik terbaik TypeScript dan Angular.
 
-## TypeScript Best Practices
+## Praktik Terbaik TypeScript
 
-- Use strict type checking
-- Prefer type inference when the type is obvious
-- Avoid the `any` type; use `unknown` when type is uncertain
+- Gunakan **strict type checking**.
+- Utamakan **type inference** jika tipe data sudah jelas.
+- Hindari penggunaan tipe `any`; gunakan `unknown` jika tipe data belum dapat dipastikan.
 
-## Angular Best Practices
+## Praktik Terbaik Angular
 
-- Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
-- Use signals for state management
-- Implement lazy loading for feature routes
-- Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
-- Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
+- Selalu gunakan **standalone component** daripada **NgModule**.
+- **Jangan** menetapkan `standalone: true` di dalam decorator Angular. Pada Angular v20+, komponen bersifat standalone secara default.
+- Gunakan **signals** untuk manajemen state.
+- Terapkan **lazy loading** untuk feature routes.
+- **Jangan** gunakan decorator `@HostBinding` dan `@HostListener`. Sebagai gantinya, letakkan host binding di dalam properti `host` pada decorator `@Component` atau `@Directive`.
+- Gunakan **NgOptimizedImage** untuk semua gambar statis.
+  - `NgOptimizedImage` tidak mendukung gambar **base64 inline**.
 
-## Accessibility Requirements
+## Persyaratan Aksesibilitas
 
-- It MUST pass all AXE checks.
-- It MUST follow all WCAG AA minimums, including focus management, color contrast, and ARIA attributes.
+- Kode **harus** lolos semua pemeriksaan **AXE**.
+- Kode **harus** memenuhi minimal standar **WCAG AA**, termasuk:
+  - Manajemen fokus (focus management).
+  - Kontras warna yang memadai.
+  - Penggunaan atribut **ARIA** yang sesuai.
 
-### Components
+## Komponen
 
-- Keep components small and focused on a single responsibility
-- Use `input()` and `output()` functions instead of decorators
-- Use `computed()` for derived state
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
-- Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
-- Do NOT use `ngClass`, use `class` bindings instead
-- Do NOT use `ngStyle`, use `style` bindings instead
-- When using external templates/styles, use paths relative to the component TS file.
+- Buat komponen yang kecil dan memiliki satu tanggung jawab yang jelas.
+- Gunakan fungsi `input()` dan `output()` sebagai pengganti decorator.
+- Gunakan `computed()` untuk state turunan (_derived state_).
+- Tetapkan `changeDetection: ChangeDetectionStrategy.OnPush` pada decorator `@Component`.
+- Untuk komponen sederhana, utamakan penggunaan **inline template**.
+- Lebih disarankan menggunakan **Reactive Forms** daripada **Template-driven Forms**.
+- **Jangan** gunakan `ngClass`; gunakan **class binding** sebagai gantinya.
+- **Jangan** gunakan `ngStyle`; gunakan **style binding** sebagai gantinya.
+- Jika menggunakan template atau stylesheet eksternal, gunakan path yang relatif terhadap file TypeScript komponen.
 
-## State Management
+## Manajemen State
 
-- Use signals for local component state
-- Use `computed()` for derived state
-- Keep state transformations pure and predictable
-- Do NOT use `mutate` on signals, use `update` or `set` instead
+- Gunakan **signals** untuk state lokal komponen.
+- Gunakan `computed()` untuk state turunan.
+- Pastikan transformasi state bersifat murni (_pure_) dan mudah diprediksi.
+- **Jangan** gunakan `mutate` pada signal; gunakan `update` atau `set`.
 
-## Templates
+## Template
 
-- Keep templates simple and avoid complex logic
-- Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
-- Do not assume globals like (`new Date()`) are available.
+- Buat template tetap sederhana dan hindari logika yang kompleks.
+- Gunakan **native control flow** (`@if`, `@for`, `@switch`) daripada `*ngIf`, `*ngFor`, dan `*ngSwitch`.
+- Gunakan **async pipe** untuk menangani **Observable**.
+- Jangan mengasumsikan objek global seperti `new Date()` tersedia di dalam template.
 
-## Services
+## Service
 
-- Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
-- Use the `inject()` function instead of constructor injection
+- Rancang setiap service agar hanya memiliki satu tanggung jawab.
+- Gunakan `providedIn: 'root'` untuk service singleton.
+- Gunakan fungsi `inject()` sebagai pengganti constructor injection.

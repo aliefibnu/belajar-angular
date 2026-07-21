@@ -53,7 +53,9 @@
 │  user.component.ts          ← Logic & Config │
 │  ┌─────────────────────────────────────────┐ │
 │  │ @Component({                            │ │
-│  │   selector: 'app-user',                 │ │
+│  │     // @ts-ignore: Angular Language Service false positive
+changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-user',                 │ │
 │  │   templateUrl: './user.component.html', │ │
 │  │   styleUrl: './user.component.scss'     │ │
 │  │ })                                      │ │
@@ -518,7 +520,9 @@ export class TodoItemComponent {
 ```typescript
 // Child component dengan two-way binding
 @Component({
-  selector: 'app-custom-input',
+    // @ts-ignore: Angular Language Service false positive
+changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-custom-input',
   template: `
     <input
       [value]="value()"
@@ -2330,9 +2334,15 @@ export class AuthGuard {}
 
 // Selectors: kebab-case dengan prefix 'app-'
 @Component({
-  selector: 'app-user-list'    // ✅
-  // selector: 'user-list'     // ❌ No prefix
-  // selector: 'appUserList'   // ❌ camelCase
+    // @ts-ignore: Angular Language Service false positive
+changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-user-list'    // ✅
+  //   // @ts-ignore: Angular Language Service false positive
+changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'user-list'     // ❌ No prefix
+  //   // @ts-ignore: Angular Language Service false positive
+changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'appUserList'   // ❌ camelCase
 })
 
 // Di template:

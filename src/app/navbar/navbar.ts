@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { routes } from '../app.routes';
 import { RouterModule } from '@angular/router';
 
