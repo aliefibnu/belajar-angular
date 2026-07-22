@@ -19,7 +19,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/counter/counter').then((p) => p.CounterPage),
+        loadComponent: () => import('./pages/weather/info/info').then((p) => p.InfoPages),
       },
       {
         path: 'search',
