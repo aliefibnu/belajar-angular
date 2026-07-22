@@ -1,33 +1,30 @@
 import { Routes } from '@angular/router';
-import { HomePage } from './pages/home/home';
-import { CounterPage } from './pages/counter/counter';
-import { TodolistPage } from './pages/todolist/todolist';
-import { WeatherPage } from './pages/weather/weather';
-import { SearchWeatherPage } from './pages/weather/search/search';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomePage,
+    loadComponent: () => import('./pages/home/home').then((p) => p.HomePage),
   },
   {
     path: 'counter',
-    component: CounterPage,
+    loadComponent: () => import('./pages/counter/counter').then((p) => p.CounterPage),
   },
   {
     path: 'todolist',
-    component: TodolistPage,
+    loadComponent: () => import('./pages/todolist/todolist').then((p) => p.TodolistPage),
   },
   {
     path: 'weather',
+    loadComponent: () => import('./pages/weather/weather').then((p) => p.WeatherLayout),
     children: [
       {
         path: '',
-        component: WeatherPage,
+        loadComponent: () => import('./pages/counter/counter').then((p) => p.CounterPage),
       },
       {
         path: 'search',
-        component: SearchWeatherPage,
+        loadComponent: () =>
+          import('./pages/weather/search/search').then((p) => p.SearchWeatherPage),
       },
     ],
   },

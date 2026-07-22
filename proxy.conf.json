@@ -1,0 +1,10 @@
+{
+  "/weather-api": {
+    "target": "https://wttr.in",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/weather-api": ""
+    }
+  }
+}

@@ -1,0 +1,34 @@
+<div
+  class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+>
+  <!-- Layout Atas Bawah: Title & Value -->
+  <div class="flex flex-col space-y-1 mb-4 w-fit">
+    <span class="text-sm font-medium text-gray-500 tracking-wide uppercase w-fit">{{
+      cardData.title
+    }}</span>
+    <span class="text-3xl font-bold text-gray-900 tracking-tight w-fit">{{ cardData.value }}</span>
+  </div>
+
+  <!-- Deskripsi Tambahan -->
+  <p class="text-sm text-gray-600 leading-relaxed mb-4" *ngIf="cardData.description">
+    {{ cardData.description }}
+  </p>
+
+  <!-- Link Opsional (Hanya muncul jika cardData.link diisi) -->
+  <div *ngIf="cardData.link">
+    <a
+      [href]="cardData.link"
+      class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors group"
+    >
+      Lihat Detail
+      <svg
+        class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+</div>
