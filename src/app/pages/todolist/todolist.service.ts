@@ -1,10 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class TodolistService {
   STORAGE_KEY = 'todolist';
   todos = signal<Todo[]>([]);

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 @Component({
-  selector: 'app-custom-button',
+  selector: 'custom-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './custom-button.html',
 })

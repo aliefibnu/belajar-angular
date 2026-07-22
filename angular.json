@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "pemula": {
+    "pemula-v22": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pemula:build:production"
+              "buildTarget": "pemula-v22:build:production"
             },
             "development": {
-              "buildTarget": "pemula:build:development"
+              "buildTarget": "pemula-v22:build:development"
             }
           },
           "defaultConfiguration": "development"
