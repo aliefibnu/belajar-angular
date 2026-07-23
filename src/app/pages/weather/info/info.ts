@@ -1,29 +1,65 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Loader } from '../../../components/loader/loader';
+import { Card } from '../../../components/card/card';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleArrowUp, lucideClock } from '@ng-icons/lucide';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, filter, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-info',
-  imports: [],
+  imports: [Loader, Card, NgIcon],
+  providers: provideIcons({ lucideClock, lucideCircleArrowUp }),
   templateUrl: './info.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InfoPages implements OnInit {
+export class InfoPages {
   http = inject(HttpClient);
-  data = signal<WeatherRes>(null);
+  city = signal('');
+  data = toSignal(
+    this.http.get<{ city: string }>('https://ipwho.is').pipe(
+      filter((ipData) => !!ipData.city),
+      switchMap((ipdata) => {
+        this.city.update((c) => ipdata.city);
+        return this.http.get<WeatherRes>(`/weather-api/${ipdata.city}?format=j1`);
+      }),
+      catchError((err: HttpErrorResponse) => {
+        Notify.failure(err.message);
+        return of(null);
+      }),
+    ),
+  );
 
-  constructor() {
-    effect(() => console.log(this.data()));
-  }
+  currentCond = computed(() => this.data()?.current_condition?.[0]);
 
-  ngOnInit(): void {
-    this.http.get<WeatherRes>('/weather-api/batam?format=j1').subscribe({
-      next: (res) => this.data.set(res),
-      error: (e: HttpErrorResponse) => Notify.failure(e.message),
+  ubahWaktu(waktuString: string) {
+    const [waktu, periode] = waktuString.split(' ');
+    const tanggal = new Date();
+    let [jam, menit] = waktu.split(':').map(Number);
+
+    if (periode === 'PM' && jam !== 12) jam += 12;
+    if (periode === 'AM' && jam === 12) jam = 0;
+
+    tanggal.setHours(jam, menit, 0, 0);
+    tanggal.setHours(tanggal.getHours() + 7);
+
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
     });
-  }
 
-  get currentCond() {
-    return this.data()?.current_condition?.[0];
+    return formatter.format(tanggal);
   }
 }
 
@@ -36,8 +72,6 @@ type WeatherRes = {
     temp_C: string;
     uvIndex: string;
     visibility: string;
-    // weatherDesc: Array [ {…} ],
-    // weatherIconUrl: Array [ {…} ],
     winddirDegree: string;
     windspeedKmph: string;
   }[];

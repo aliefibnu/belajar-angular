@@ -1,0 +1,33 @@
+<div
+  class="w-screen h-screen flex items-center justify-center fixed top-0 left-0 z-50 bg-black/40 text-sky-200"
+>
+  <div class="content flex items-center justify-center flex-col">
+    <div
+      aria-label="Orange and tan hamster running in a metal wheel"
+      role="img"
+      class="wheel-and-hamster"
+    >
+      <div class="wheel"></div>
+      <div class="hamster">
+        <div class="hamster__body">
+          <div class="hamster__head">
+            <div class="hamster__ear"></div>
+            <div class="hamster__eye"></div>
+            <div class="hamster__nose"></div>
+          </div>
+          <div class="hamster__limb hamster__limb--fr"></div>
+          <div class="hamster__limb hamster__limb--fl"></div>
+          <div class="hamster__limb hamster__limb--br"></div>
+          <div class="hamster__limb hamster__limb--bl"></div>
+          <div class="hamster__tail"></div>
+        </div>
+      </div>
+      <div class="spoke"></div>
+    </div>
+    <i class="text flex gap-2">
+      <div class="text-white">{{ '<'.repeat(dot().length) }}</div>
+      Loading
+      <div class="text-white">{{ '>'.repeat(dot().length) }}</div>
+    </i>
+  </div>
+</div>

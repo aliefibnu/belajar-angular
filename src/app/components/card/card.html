@@ -6,7 +6,10 @@
     <span class="text-sm font-medium text-gray-500 tracking-wide uppercase w-fit">{{
       cardData.title
     }}</span>
-    <span class="text-3xl font-bold text-gray-900 tracking-tight w-fit">{{ cardData.value }}</span>
+    <span class="text-3xl font-bold text-gray-900 tracking-tight w-fit flex items-center"
+      >{{ cardData.value }}
+      <ng-content />
+    </span>
   </div>
 
   <!-- Deskripsi Tambahan -->
