@@ -8,13 +8,17 @@
       <h1
         class="text-3xl font-bold py-4 bg-sky-400/5 rounded-lg shadow-md hover:shadow-lg duration-500 border border-gray-50 mb-5 col-span-full w-full flex items-center justify-center"
       >
-        Cuaca Sekarang - {{ city() }}
+        Cuaca Sekarang - {{ city() }} - {{ currentCond()?.weatherDesc?.[0]?.value }}
       </h1>
       <div
         class="col-start-1 row-span-3 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center flex-col"
       >
-        <div class="top text-6xl text-gray-600 mb-10">
-          <ng-icon name="lucideClock" />
+        <div class="top text-6xl text-gray-600 mb-5">
+          <img
+            [src]="currentCond()?.weatherIconUrl?.[0]?.value"
+            alt=""
+            class="h-40 aspect-square rounded-2xl shadow-2xl"
+          />
         </div>
         <small class="text-gray-600 italic">Diamati Pada</small>
         <div class="text-2xl font-bold">{{ ubahWaktu(currentCond()?.observation_time ?? '') }}</div>

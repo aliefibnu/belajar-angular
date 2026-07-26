@@ -1,16 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideSearch } from '@ng-icons/lucide';
+import { lucideMapPinSearch, lucideSearch } from '@ng-icons/lucide';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { catchError, filter, map, of } from 'rxjs';
+import { Loader } from '../../../components/loader/loader';
 
 @Component({
   selector: 'app-search',
-  imports: [NgIcon, ReactiveFormsModule],
-  providers: provideIcons({ lucideSearch }),
+  imports: [NgIcon, ReactiveFormsModule, Loader],
+  providers: provideIcons({ lucideSearch, lucideMapPinSearch }),
   templateUrl: './search.html',
 })
 export class SearchWeatherPage {
@@ -18,28 +19,52 @@ export class SearchWeatherPage {
     search: new FormControl(''),
   });
   http = inject(HttpClient);
+  searchVal = signal(this.formControlGroup.get('search')?.value);
+  selectedCountry = signal({
+    name: '',
+    id: 0,
+  });
 
   countries = toSignal(
-    this.http
-      .get<{ countries: Country[]; status: number }>('https://csc.sidsworld.co.in/api/countries')
-      .pipe(
-        filter((data) => !!data.countries),
-        map((data) => data.countries),
-        catchError((e: HttpErrorResponse) => {
-          Notify.failure(e.message);
-          return of(null);
-        }),
-      ),
+    this.selectedCountry().name == ''
+      ? this.http
+          .get<{ countries: Country[]; status: number }>(
+            'https://csc.sidsworld.co.in/api/countries',
+          )
+          .pipe(
+            filter((data) => !!data.countries),
+            map((data) => data.countries),
+            catchError((e: HttpErrorResponse) => {
+              Notify.failure(e.message);
+              return of(null);
+            }),
+          )
+      : this.http
+          .get<{ countries: Country[]; status: number }>(
+            `/api/citiesByCountry/${this.selectedCountry().id}`,
+          )
+          .pipe(
+            filter((data) => !!data.countries),
+            map((data) => data.countries),
+            catchError((e: HttpErrorResponse) => {
+              Notify.failure(e.message);
+              return of(null);
+            }),
+          ),
   );
 
-  constructor() {
-    effect(() => {
-      this.countries() && console.log(this.countries());
-    });
-  }
+  filteredCountries = computed(() =>
+    this.countries()?.filter((country) =>
+      country.name.toLowerCase().includes((this.searchVal() ?? '').toLowerCase()),
+    ),
+  );
 
   onSubmit() {
-    console.log(this.formControlGroup.get('search')?.value);
+    this.searchVal.set(this.formControlGroup.get('search')?.value ?? '');
+  }
+
+  setSelectedCountry({ name, id }: { name: string; id: number }) {
+    this.selectedCountry.set({ name, id });
   }
 }
 

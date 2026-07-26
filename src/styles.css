@@ -1,7 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@tailwind utilities;
 
 @theme {
   --animate-loader: spin 1s linear infinite, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@import 'leaflet/dist/leaflet.css';
+
+/* Custom animations */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Custom styles for map */
+.leaflet-container {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px !important;
+  font-size: 14px !important;
+}
+
+.center-marker {
+  background: none !important;
+  border: none !important;
+}
+
+/* Scrollbar styling */
+.marked-locations::-webkit-scrollbar {
+  width: 6px;
+}
+
+.marked-locations::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.marked-locations::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.marked-locations::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

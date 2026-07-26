@@ -19,7 +19,7 @@ import { catchError, filter, of, switchMap } from 'rxjs';
 @Component({
   selector: 'app-info',
   imports: [Loader, Card, NgIcon],
-  providers: provideIcons({ lucideClock, lucideCircleArrowUp }),
+  providers: provideIcons({ lucideCircleArrowUp }),
   templateUrl: './info.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -74,5 +74,7 @@ type WeatherRes = {
     visibility: string;
     winddirDegree: string;
     windspeedKmph: string;
+    weatherDesc: { value: string }[];
+    weatherIconUrl: { value: string }[];
   }[];
 } | null;
