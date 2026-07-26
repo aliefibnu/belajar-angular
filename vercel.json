@@ -6,7 +6,7 @@
     },
     {
       "source": "/api/items/:path*",
-      "destination": "https://tryng-alief-backend.vercel.app/:path*"
+      "destination": "https://tryng-alief-backend.vercel.app/items/:path*"
     }
   ]
 }
