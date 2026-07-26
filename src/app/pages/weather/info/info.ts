@@ -31,7 +31,9 @@ export class InfoPages {
       filter((ipData) => !!ipData.city),
       switchMap((ipdata) => {
         this.city.update((c) => ipdata.city);
-        return this.http.get<WeatherRes>(`/weather-api/${ipdata.city}?format=j1`);
+        return this.http.get<WeatherRes>(
+          `https://tryng-alief.vercel.app/api/weather/${ipdata.city}?format=j1`,
+        );
       }),
       catchError((err: HttpErrorResponse) => {
         Notify.failure(err.message);
