@@ -32,4 +32,28 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'items',
+    loadComponent: () => import('./pages/items/items').then((p) => p.ItemsLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/items/view-all/view-all').then((p) => p.ViewAllItemsPage),
+      },
+      {
+        path: ':id/view',
+        loadComponent: () =>
+          import('./pages/items/view-one/view-one').then((p) => p.ViewOneItemPage),
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./pages/items/edit/edit').then((p) => p.EditItemPage),
+      },
+      {
+        path: 'create',
+        loadComponent: () => import('./pages/items/create/create').then((p) => p.CreateItemPage),
+      },
+    ],
+  },
 ];

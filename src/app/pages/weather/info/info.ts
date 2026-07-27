@@ -61,6 +61,7 @@ export class InfoPages {
   }
 
   currentCond = computed(() => this.data()?.current_condition?.[0]);
+  nearestArea = computed(() => this.data()?.nearest_area?.[0]);
 
   ubahWaktu(waktuString: string) {
     const [waktu, periode] = waktuString.split(' ');
@@ -109,5 +110,22 @@ type WeatherRes = {
     windspeedKmph: string;
     weatherDesc: { value: string }[];
     weatherIconUrl: { value: string }[];
+  }[];
+  nearest_area: {
+    areaName: {
+      value: string;
+    }[];
+    country: {
+      value: string;
+    }[];
+    latitude: string;
+    longitude: string;
+    population: string;
+    region: {
+      value: string;
+    }[];
+    weatherUrl: {
+      value: string;
+    }[];
   }[];
 } | null;
