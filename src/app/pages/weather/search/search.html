@@ -1,8 +1,19 @@
 @if (countries()) {
   <main class="w-screen min-h-screen items-center flex flex-col pt-6 bg-zinc-100">
     <div class="bg-white rounded-2xl shadow-xl p-8 w-4xl border border-emerald-100 h-full">
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-emerald-800 mb-1">Cari Area</h1>
+      <div class="text-center mb-8 flex items-center justify-around">
+        <h1 class="text-3xl font-bold text-emerald-800 mb-1">
+          Cari Area {{ selectedCountry().name ? `di ${selectedCountry().name}` : `` }}
+        </h1>
+        @if (selectedCountry().name) {
+          <div
+            class="flex items-center justify-center p-2 bg-teal-500 rounded-lg text-white gap-2 hover:bg-teal-700 cursor-pointer duration-500 border border-white hover:border-teal-900 shadow-lg"
+            (click)="setSelectedCountry({ name: '', id: 0 })"
+          >
+            <ng-icon name="lucideMinusCircle" />
+            Reset Negara
+          </div>
+        }
       </div>
 
       <form
@@ -17,7 +28,6 @@
           formControlName="search"
           placeholder="India, Indonesia, America, China..."
           class="px-4 py-3 focus:outline-0 grow bg-transparent text-gray-700 placeholder-gray-400"
-          (input)="onSubmit()"
         />
         <button
           type="submit"
@@ -29,16 +39,32 @@
     </div>
 
     <div class="mt-5 w-4xl grid grid-cols-2 auto-rows-auto gap-3">
-      @for (region of filteredCountries(); track region.id) {
-        <div class="bg-white shadow-lg rounded-2xl flex justify-between">
-          <span class="p-4">{{ region.name }}</span>
-          <button
-            class="p-4 bg-sky-600 rounded-r-2xl text-white hover:bg-sky-500 hover:text-yellow-100/75 duration-500 cursor-pointer hover:px-7"
-          >
-            <ng-icon name="lucideMapPinSearch" />
-            Cari Kota
-          </button>
-        </div>
+      @if (selectedCountry().name) {
+        @for (city of cities(); track city.id) {
+          <div class="bg-white shadow-lg rounded-2xl flex justify-between">
+            <span class="p-4">{{ city.name }}</span>
+            <a
+              class="p-4 bg-sky-600 rounded-r-2xl text-white hover:bg-sky-500 hover:text-yellow-100/75 duration-500 cursor-pointer hover:px-7"
+              [routerLink]="`/weather/${city.name}`"
+            >
+              <ng-icon name="lucideCloudSun" />
+              Lihat Cuaca
+            </a>
+          </div>
+        }
+      } @else {
+        @for (region of filteredCountries(); track region.id) {
+          <div class="bg-white shadow-lg rounded-2xl flex justify-between">
+            <span class="p-4">{{ region.name }}</span>
+            <button
+              class="p-4 bg-sky-600 rounded-r-2xl text-white hover:bg-sky-500 hover:text-yellow-100/75 duration-500 cursor-pointer hover:px-7"
+              (click)="setSelectedCountry({ name: region.name, id: region.id })"
+            >
+              <ng-icon name="lucideMapPinSearch" />
+              Cari Kota
+            </button>
+          </div>
+        }
       }
     </div>
   </main>

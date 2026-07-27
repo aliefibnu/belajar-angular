@@ -15,6 +15,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleArrowUp, lucideClock } from '@ng-icons/lucide';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, filter, of, switchMap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-info',
@@ -25,22 +26,39 @@ import { catchError, filter, of, switchMap } from 'rxjs';
 })
 export class InfoPages {
   http = inject(HttpClient);
-  city = signal('');
+  activatedRoute = inject(ActivatedRoute);
+  city = signal(this.activatedRoute.snapshot.params['city']);
+  timeZoneHour = signal(0);
   data = toSignal(
-    this.http.get<{ city: string }>('https://ipwho.is').pipe(
-      filter((ipData) => !!ipData.city),
-      switchMap((ipdata) => {
-        this.city.update((c) => ipdata.city);
-        return this.http.get<WeatherRes>(
-          `https://tryng-alief.vercel.app/api/weather/${ipdata.city}?format=j1`,
-        );
-      }),
-      catchError((err: HttpErrorResponse) => {
-        Notify.failure(err.message);
-        return of(null);
-      }),
-    ),
+    !this.city()
+      ? this.http.get<{ city: string }>('https://ipwho.is').pipe(
+          filter((ipData) => !!ipData.city),
+          switchMap((ipdata) => {
+            this.city.update((c) => ipdata.city);
+            return this.http.get<WeatherRes>(`/weather/${ipdata.city}?format=j1`);
+          }),
+          catchError((err: HttpErrorResponse) => {
+            Notify.failure(err.message);
+            return of(null);
+          }),
+        )
+      : this.http.get<WeatherRes>(`/weather/${this.city()}?format=j1`),
   );
+
+  constructor() {
+    effect(() => {
+      this.city() &&
+        this.http
+          .get<{ results: { timezone: string }[] }>(
+            'https://geocoding-api.open-meteo.com/v1/search?name=' + this.city(),
+          )
+          .pipe(filter((res) => !!res.results))
+          .subscribe((res) => {
+            const parsed = parseInt(this.getUTCOffset(res.results[0].timezone)?.slice(3) ?? '7');
+            this.timeZoneHour.set(parsed);
+          });
+    });
+  }
 
   currentCond = computed(() => this.data()?.current_condition?.[0]);
 
@@ -53,7 +71,7 @@ export class InfoPages {
     if (periode === 'AM' && jam === 12) jam = 0;
 
     tanggal.setHours(jam, menit, 0, 0);
-    tanggal.setHours(tanggal.getHours() + 7);
+    tanggal.setHours(tanggal.getHours() + this.timeZoneHour());
 
     const formatter = new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
@@ -62,6 +80,19 @@ export class InfoPages {
     });
 
     return formatter.format(tanggal);
+  }
+
+  getUTCOffset(timeZone: string) {
+    const now = new Date();
+
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      timeZoneName: 'shortOffset',
+    });
+
+    const parts = formatter.formatToParts(now);
+
+    return parts.find((p) => p.type === 'timeZoneName')?.value;
   }
 }
 

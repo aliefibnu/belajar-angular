@@ -3,15 +3,21 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMapPinSearch, lucideSearch } from '@ng-icons/lucide';
+import {
+  lucideCloudSun,
+  lucideMapPinSearch,
+  lucideMinusCircle,
+  lucideSearch,
+} from '@ng-icons/lucide';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { catchError, filter, map, of } from 'rxjs';
 import { Loader } from '../../../components/loader/loader';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-search',
-  imports: [NgIcon, ReactiveFormsModule, Loader],
-  providers: provideIcons({ lucideSearch, lucideMapPinSearch }),
+  imports: [NgIcon, ReactiveFormsModule, Loader, RouterLink],
+  providers: provideIcons({ lucideSearch, lucideMapPinSearch, lucideCloudSun, lucideMinusCircle }),
   templateUrl: './search.html',
 })
 export class SearchWeatherPage {
@@ -25,32 +31,54 @@ export class SearchWeatherPage {
     id: 0,
   });
 
+  cities = signal<City[] | null>(null);
+
+  constructor() {
+    effect(() => {
+      if (this.selectedCountry().name == '') return;
+      this.searchVal()
+        ? this.http
+            .get<{ status: number; cities: City[] }>(
+              `https://csc.sidsworld.co.in/api/citiesByCountry/${this.selectedCountry().id}/search/${this.searchVal()}`,
+            )
+            .pipe(
+              filter((data) => !!data.cities),
+              map((res) => res.cities),
+              catchError((e: HttpErrorResponse) => {
+                if (e.status != 404) Notify.failure(e.message);
+                if (e.status == 404) Notify.failure('Kota Tidak Terdaftar');
+                return of(null);
+              }),
+            )
+            .subscribe((citydata) => this.cities.set(citydata))
+        : this.http
+            .get<{ status: number; cities: { data: City[] } }>(
+              `https://csc.sidsworld.co.in/api/citiesByCountry/${this.selectedCountry().id}`,
+            )
+            .pipe(
+              filter((data) => !!data.cities.data),
+              map((res) => res.cities),
+              catchError((e: HttpErrorResponse) => {
+                if (e.status != 404) Notify.failure(e.message);
+                if (e.status == 404) Notify.failure('Kota Tidak Terdaftar');
+                return of(null);
+              }),
+            )
+            .subscribe((citydata) => this.cities.set(citydata?.data ?? null));
+    });
+  }
+
   countries = toSignal(
-    this.selectedCountry().name == ''
-      ? this.http
-          .get<{ countries: Country[]; status: number }>(
-            'https://csc.sidsworld.co.in/api/countries',
-          )
-          .pipe(
-            filter((data) => !!data.countries),
-            map((data) => data.countries),
-            catchError((e: HttpErrorResponse) => {
-              Notify.failure(e.message);
-              return of(null);
-            }),
-          )
-      : this.http
-          .get<{ countries: Country[]; status: number }>(
-            `/api/citiesByCountry/${this.selectedCountry().id}`,
-          )
-          .pipe(
-            filter((data) => !!data.countries),
-            map((data) => data.countries),
-            catchError((e: HttpErrorResponse) => {
-              Notify.failure(e.message);
-              return of(null);
-            }),
-          ),
+    this.http
+      .get<{ countries: Country[]; status: number }>('https://csc.sidsworld.co.in/api/countries')
+      .pipe(
+        filter((data) => !!data.countries),
+        map((data) => data.countries),
+        catchError((e: HttpErrorResponse) => {
+          Notify.failure(e.message);
+          return of(null);
+        }),
+      ),
   );
 
   filteredCountries = computed(() =>
@@ -64,6 +92,7 @@ export class SearchWeatherPage {
   }
 
   setSelectedCountry({ name, id }: { name: string; id: number }) {
+    this.searchVal.set('');
     this.selectedCountry.set({ name, id });
   }
 }
@@ -95,4 +124,34 @@ type Country = {
   updated_at: string;
   flag: 1;
   wikiDataId: string;
+};
+
+type City = {
+  id: number;
+  name: string;
+  state_id: number;
+  state_code: string;
+  country_id: number;
+  country_code: string;
+  latitude: string;
+  longitude: string;
+  created_at: string;
+  updated_at: string;
+  flag: number;
+  wikiDataId: string;
+  state: {
+    id: number;
+    name: string;
+    country_id: number;
+    country_code: string;
+    fips_code: string;
+    iso2: string;
+    type: string;
+    latitude: string;
+    longitude: string;
+    created_at: string;
+    updated_at: string;
+    flag: number;
+    wikiDataId: string;
+  };
 };

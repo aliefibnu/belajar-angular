@@ -18,13 +18,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/weather/weather').then((p) => p.WeatherLayout),
     children: [
       {
-        path: '',
-        loadComponent: () => import('./pages/weather/info/info').then((p) => p.InfoPages),
-      },
-      {
         path: 'search',
         loadComponent: () =>
           import('./pages/weather/search/search').then((p) => p.SearchWeatherPage),
+      },
+      {
+        path: ':city',
+        loadComponent: () => import('./pages/weather/info/info').then((p) => p.InfoPages),
+      },
+      {
+        path: '',
+        loadComponent: () => import('./pages/weather/info/info').then((p) => p.InfoPages),
       },
     ],
   },

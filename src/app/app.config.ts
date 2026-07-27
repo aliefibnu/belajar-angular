@@ -3,7 +3,8 @@ import localeId from '@angular/common/locales/id';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { registerLocaleData } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { apiInterceptors } from './interceptors/api.interceptors';
 
 registerLocaleData(localeId);
 
@@ -12,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     { provide: LOCALE_ID, useValue: 'id_ID' },
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([apiInterceptors])),
   ],
 };
