@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewOne } from './view-one';
+import { ViewOneItemPage } from './view-one';
 
 describe('ViewOne', () => {
-  let component: ViewOne;
-  let fixture: ComponentFixture<ViewOne>;
+  let component: ViewOneItemPage;
+  let fixture: ComponentFixture<ViewOneItemPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ViewOne],
+      imports: [ViewOneItemPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ViewOne);
+    fixture = TestBed.createComponent(ViewOneItemPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

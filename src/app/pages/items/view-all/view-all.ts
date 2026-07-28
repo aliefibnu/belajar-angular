@@ -1,12 +1,28 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ItemsService } from '../items.service';
+import { ItemsService, ResponseItem } from '../items.service';
 import { Router } from '@angular/router';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideEdit,
+  lucideEye,
+  lucideFile,
+  lucideMessageCircleWarning,
+  lucideTrash2,
+} from '@ng-icons/lucide';
+import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 
 @Component({
   selector: 'app-view-all',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './view-all.html',
+  providers: provideIcons({
+    lucideEye,
+    lucideTrash2,
+    lucideMessageCircleWarning,
+    lucideFile,
+    lucideEdit,
+  }),
 })
 export class ViewAllItemsPage implements OnInit {
   itemServ = inject(ItemsService);
@@ -42,21 +58,37 @@ export class ViewAllItemsPage implements OnInit {
     this.router.navigate([`/items/${id}/edit`]);
   }
 
-  deleteItem(id: number): void {
-    if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-      this.itemServ.delete(id).subscribe({
-        next: () => {
-          const currentItems = this.items();
-          this.itemServ.items.set(currentItems.filter((item) => item.id !== id));
+  viewItem(id: number): void {
+    this.router.navigate([`/items/${id}/view`]);
+  }
 
-          Notify.success('Item berhasil dihapus');
-        },
-        error: (err) => {
-          console.error('Error deleting item:', err);
-          Notify.failure('Gagal menghapus item');
-        },
-      });
-    }
+  deleteItem(item: ResponseItem['data'][0]): void {
+    Confirm.show(
+      'HAPUS ITEM',
+      `Apakah anda yakin akan menghapus item ${item.name}?`,
+      'Ya, Hapus !',
+      'Batal',
+      () => {
+        this.itemServ.delete(item.id).subscribe({
+          next: () => {
+            const currentItems = this.items();
+            this.itemServ.items.set(currentItems.filter((i) => i.id !== item.id));
+
+            Notify.success('Item berhasil dihapus');
+          },
+          error: (err) => {
+            console.error('Error deleting item:', err);
+            Notify.failure('Gagal menghapus item');
+          },
+        });
+      },
+      () => {},
+      {
+        okButtonBackground: 'oklch(57.7% 0.245 27.325) ',
+        okButtonColor: 'white',
+        titleColor: 'oklch(57.7% 0.245 27.325) ',
+      },
+    );
   }
 
   navigateToCreate(): void {

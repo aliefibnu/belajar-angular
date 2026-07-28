@@ -17,7 +17,7 @@ export class ItemsService {
   }
 
   getById(id: number) {
-    return this.http.get<ResponseItem>(`${this.baseurl}/${id}`);
+    return this.http.get<ResponseItemById>(`${this.baseurl}/${id}`);
   }
 
   update(id: Item['id'], payload: Partial<Omit<Item, 'id'>>) {
@@ -35,7 +35,12 @@ type Item = {
   description: string;
 };
 
-type ResponseItem = {
+export type ResponseItem = {
   success: boolean;
   data: Item[];
+};
+
+type ResponseItemById = {
+  success: boolean;
+  data: Item;
 };
