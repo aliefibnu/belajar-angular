@@ -94,4 +94,9 @@ export class ViewAllItemsPage implements OnInit {
   navigateToCreate(): void {
     this.router.navigate(['/items/create']);
   }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+  }
 }

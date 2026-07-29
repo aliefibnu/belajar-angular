@@ -1,64 +1,116 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   Validators,
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
-  FormArray,
 } from '@angular/forms';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowLeftFromLine, lucideSend } from '@ng-icons/lucide';
+import {
+  lucideArrowLeftFromLine,
+  lucideFileImage,
+  lucideImage,
+  lucideSend,
+  lucideX,
+} from '@ng-icons/lucide';
+import { ItemsService } from '../items.service';
+import { FormUtil } from '../../../utils/form.util';
 
 @Component({
   selector: 'app-create',
   imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, NgIcon],
   templateUrl: './create.html',
-  providers: provideIcons({ lucideArrowLeftFromLine, lucideSend }),
+  providers: provideIcons({
+    lucideArrowLeftFromLine,
+    lucideSend,
+    lucideImage,
+    lucideFileImage,
+    lucideX,
+  }),
 })
 export class CreateItemPage {
-  http = inject(HttpClient);
+  itemServ = inject(ItemsService);
+  formUtil = inject(FormUtil);
   router = inject(Router);
   formGroup = new FormGroup({
     name: new FormControl('', [Validators.minLength(3), Validators.required]),
     description: new FormControl('', [Validators.minLength(6), Validators.required]),
+    image: new FormControl<File | null>(null),
   });
+  previewUrl = signal<string | null>(null);
+  selectedFile = signal<File | null>(null);
 
-  onSubmit() {
-    const errors = this.getFormValidationErrors(this.formGroup);
-    if (errors.length > 0) {
-      errors.forEach((err) => Notify.failure(err));
-      return;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      if (!file.type.startsWith('image/')) {
+        Notify.failure('Please upload an image file');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        Notify.failure('File size should not exceed 5MB');
+        return;
+      }
+
+      this.selectedFile.set(file);
+      this.formGroup.patchValue({ image: file });
+
+      this.previewUrl.set(URL.createObjectURL(file));
     }
-
-    const { name, description } = this.formGroup.getRawValue();
-
-    this.http.post('/items', { name, description }).subscribe({
-      next: () => {
-        Notify.success('Berhasi membuat item baru !');
-        this.router.navigate(['items']);
-      },
-      error: ({ error }) => Notify.failure(error.errors),
-    });
   }
 
-  getFormValidationErrors(form: FormGroup | FormArray) {
-    const errors: string[] = [];
-    Object.keys(form.controls).forEach((key) => {
-      const control = form.get(key);
+  removeImage(event: Event): void {
+    event.stopPropagation();
+    this.previewUrl.set(null);
+    this.selectedFile.set(null);
+    this.formGroup.patchValue({ image: null });
 
-      if (control instanceof FormGroup || control instanceof FormArray) {
-        this.getFormValidationErrors(control);
-      } else if (control instanceof FormControl && control.errors) {
-        Object.keys(control.errors).forEach((errorKey) => {
-          errors.push(`${key} error ${errorKey}`);
+    const fileInput = document.getElementById('image') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  onSubmit(): void {
+    this.formUtil
+      .getFormValidationErrors(this.formGroup)
+      .then(() => {
+        const formData = new FormData();
+        formData.append('name', this.formGroup.get('name')?.value ?? '');
+        formData.append('description', this.formGroup.get('description')?.value ?? '');
+
+        if (this.selectedFile()) {
+          formData.append('image', this.selectedFile()!);
+        }
+
+        this.itemServ.create(formData).subscribe({
+          next: (res) => {
+            Notify.success('Berhasil membuat item!');
+            this.router.navigate(['items']);
+          },
+          error: (err) => {
+            Notify.failure('Gagal membuat item!');
+          },
         });
-      }
-    });
-    return errors;
+      })
+      .catch((err) =>
+        err.forEach((error: string) => {
+          Notify.failure(error);
+        }),
+      );
   }
 }

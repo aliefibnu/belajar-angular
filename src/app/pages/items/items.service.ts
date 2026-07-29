@@ -8,7 +8,7 @@ export class ItemsService {
 
   items = signal<Item[]>([]);
 
-  create(item: Item) {
+  create(item: Item | FormData) {
     return this.http.post<ResponseItem>(this.baseurl, item);
   }
 
@@ -20,7 +20,7 @@ export class ItemsService {
     return this.http.get<ResponseItemById>(`${this.baseurl}/${id}`);
   }
 
-  update(id: Item['id'], payload: Partial<Omit<Item, 'id'>>) {
+  update(id: Item['id'], payload: Partial<Omit<Item, 'id'>> | FormData) {
     return this.http.patch<ResponseItem>(`${this.baseurl}/${id}`, payload);
   }
 
@@ -33,6 +33,7 @@ type Item = {
   id: number;
   name: string;
   description: string;
+  image_path: string;
 };
 
 export type ResponseItem = {
