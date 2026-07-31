@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideUser,
@@ -44,6 +44,7 @@ export class SignupPage {
   isLoading = false;
   currentStep = 1;
   totalSteps = 2;
+  router = inject(Router);
 
   constructor(private fb: FormBuilder) {}
 
@@ -115,13 +116,13 @@ export class SignupPage {
     }
   }
 
-  onSubmit(): void {
-    try {
-      const { email, password } = this.signupForm.getRawValue();
-      this.authServ.signup('', email, password).then((res) => {
-        console.log(res);
-      });
-    } catch (error) {}
+  async onSubmit() {
+    const { email, password, fullName } = this.signupForm.getRawValue();
+    const { data, error } = await this.authServ.signup(fullName, email, password);
+    if (error) return Notify.failure(error.message);
+
+    Notify.success(email + ' Berhasil signup !');
+    return this.router.navigate(['items']);
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {

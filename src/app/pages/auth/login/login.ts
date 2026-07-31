@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideMail,
@@ -12,6 +12,7 @@ import {
   lucideLoader2,
 } from '@ng-icons/lucide';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,8 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
   ],
 })
 export class LoginPage {
+  authServ = inject(AuthService);
+  router = inject(Router);
   loginForm!: FormGroup;
   showPassword = false;
   isLoading = false;
@@ -48,31 +51,13 @@ export class LoginPage {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.isLoading = true;
+  async onSubmit() {
+    const { email, password } = this.loginForm.getRawValue();
+    const { data, error } = await this.authServ.login(email, password);
+    if (error) return Notify.failure(error.message);
 
-      // Simulasi loading
-      setTimeout(() => {
-        this.isLoading = false;
-
-        Notify.success('Login berhasil! Selamat datang kembali.', {
-          position: 'right-top',
-          timeout: 3000,
-          cssAnimationStyle: 'from-right',
-        });
-
-        console.log('Form Data:', this.loginForm.value);
-      }, 2000);
-    } else {
-      this.markFormGroupTouched(this.loginForm);
-
-      Notify.failure('Mohon lengkapi form dengan benar', {
-        position: 'right-top',
-        timeout: 3000,
-        cssAnimationStyle: 'from-right',
-      });
-    }
+    Notify.success(email + ' Berhasil login !');
+    return this.router.navigate(['items']);
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
