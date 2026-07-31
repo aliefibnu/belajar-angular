@@ -16,6 +16,7 @@ import {
 } from '@ng-icons/lucide';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { AuthService } from '../auth.service';
+import { AuthStore } from '../../../store/auth.store';
 
 @Component({
   selector: 'app-signup',
@@ -39,6 +40,7 @@ import { AuthService } from '../auth.service';
 })
 export class SignupPage {
   authServ = inject(AuthService);
+  authStore = inject(AuthStore);
   signupForm!: FormGroup;
   showPassword = false;
   showConfirmPassword = false;
@@ -121,6 +123,8 @@ export class SignupPage {
     const { email, password, fullName } = this.signupForm.getRawValue();
     const { data, error } = await this.authServ.signup(fullName, email, password);
     if (error) return Notify.failure(error.message);
+
+    this.authStore.refetch();
 
     Notify.success(email + ' Berhasil signup !');
     return this.router.navigate(['items']);

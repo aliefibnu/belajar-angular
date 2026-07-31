@@ -13,6 +13,7 @@ import {
 } from '@ng-icons/lucide';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { AuthService } from '../auth.service';
+import { AuthStore } from '../../../store/auth.store';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ import { AuthService } from '../auth.service';
 })
 export class LoginPage {
   authServ = inject(AuthService);
+  authStore = inject(AuthStore);
   router = inject(Router);
   loginForm!: FormGroup;
   showPassword = false;
@@ -56,6 +58,7 @@ export class LoginPage {
     const { email, password } = this.loginForm.getRawValue();
     const { data, error } = await this.authServ.login(email, password);
     if (error) return Notify.failure(error.message);
+    this.authStore.refetch();
 
     Notify.success(email + ' Berhasil login !');
     return this.router.navigate(['items']);
