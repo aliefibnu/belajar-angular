@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';
+import { AuthStore } from './store/auth.store';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,10 @@ import { Navbar } from './components/navbar/navbar';
   templateUrl: './app.html',
   imports: [RouterOutlet, Navbar],
 })
-export class App {}
+export class App implements OnInit {
+  authStore = inject(AuthStore);
+
+  ngOnInit(): void {
+    this.authStore.load();
+  }
+}

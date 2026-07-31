@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { routes } from '../../app.routes';
 import { RouterModule } from '@angular/router';
+import { AuthMenu } from './auth-menu/auth-menu';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule],
+  imports: [RouterModule, AuthMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.html',
 })
