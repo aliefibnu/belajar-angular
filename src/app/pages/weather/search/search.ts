@@ -1,5 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -18,6 +25,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-search',
   imports: [NgIcon, ReactiveFormsModule, Loader, RouterLink],
   providers: provideIcons({ lucideSearch, lucideMapPinSearch, lucideCloudSun, lucideMinusCircle }),
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './search.html',
 })
 export class SearchWeatherPage {

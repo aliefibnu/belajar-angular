@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideEye } from '@ng-icons/lucide';
 
@@ -7,6 +7,7 @@ import { lucideEye } from '@ng-icons/lucide';
   selector: 'card',
   imports: [CommonModule, NgIcon],
   providers: provideIcons({ lucideEye }),
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './card.html',
 })
 export class Card {

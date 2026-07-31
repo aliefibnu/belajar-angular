@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFan } from '@ng-icons/lucide';
 
@@ -7,6 +7,7 @@ import { lucideFan } from '@ng-icons/lucide';
   imports: [],
   styleUrl: 'loader.css',
   providers: provideIcons({ lucideFan }),
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './loader.html',
 })
 export class Loader {

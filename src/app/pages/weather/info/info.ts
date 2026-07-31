@@ -21,8 +21,8 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-info',
   imports: [Loader, Card, NgIcon],
   providers: provideIcons({ lucideCircleArrowUp }),
-  templateUrl: './info.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './info.html',
 })
 export class InfoPages {
   http = inject(HttpClient);

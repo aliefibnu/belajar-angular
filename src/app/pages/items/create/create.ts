@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -22,6 +22,7 @@ import { FormUtil } from '../../../utils/form.util';
 @Component({
   selector: 'app-create',
   imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, NgIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './create.html',
   providers: provideIcons({
     lucideArrowLeftFromLine,

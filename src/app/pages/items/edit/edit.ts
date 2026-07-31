@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormArray,
@@ -22,6 +22,7 @@ import { FormUtil } from '../../../utils/form.util';
   selector: 'app-edit',
   imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, Loader, NgIcon],
   providers: provideIcons({ lucideArrowLeftFromLine, lucideSend, lucideUpload }),
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './edit.html',
 })
 export class EditItemPage {

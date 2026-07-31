@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemsService, ResponseItem } from '../items.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -7,6 +7,7 @@ import { lucideArrowLeft, lucideEdit, lucideImage } from '@ng-icons/lucide';
 @Component({
   selector: 'app-view-one',
   imports: [NgIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './view-one.html',
   providers: provideIcons({ lucideImage, lucideArrowLeft, lucideEdit }),
 })

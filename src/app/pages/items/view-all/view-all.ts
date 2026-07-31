@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ItemsService, ResponseItem } from '../items.service';
 import { Router } from '@angular/router';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
@@ -15,6 +15,7 @@ import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 @Component({
   selector: 'app-view-all',
   imports: [NgIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './view-all.html',
   providers: provideIcons({
     lucideEye,

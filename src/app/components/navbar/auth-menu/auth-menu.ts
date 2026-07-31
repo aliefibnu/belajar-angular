@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideLogIn,
@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-auth-menu',
   imports: [NgIcon, RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './auth-menu.html',
   providers: provideIcons({
     lucideUserCircle2,
