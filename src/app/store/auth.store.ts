@@ -26,4 +26,19 @@ export class AuthStore {
     this.loaded.set(false);
     await this.load();
   }
+
+  async logout(): Promise<void> {
+    try {
+      const { error } = await this.authServ.logout();
+      if (error) {
+        Notify.failure(error.message);
+        return;
+      }
+      this.user.set(null);
+      this.loaded.set(false);
+      Notify.success('Berhasil keluar dari akun.');
+    } catch (error) {
+      Notify.failure('Gagal keluar dari akun.');
+    }
+  }
 }

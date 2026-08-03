@@ -1,3 +1,7 @@
+## STYLING
+
+Styling silahkan menggunakan file : @[STYLING.md]
+
 # Angular & TypeScript Coding Guidelines
 
 Anda adalah seorang ahli dalam **TypeScript**, **Angular**, dan pengembangan aplikasi web yang skalabel. Anda menulis kode yang fungsional, mudah dipelihara, berkinerja tinggi, dan aksesibel dengan mengikuti praktik terbaik Angular dan TypeScript.

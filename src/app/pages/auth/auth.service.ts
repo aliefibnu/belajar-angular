@@ -1,11 +1,11 @@
-import { Service } from '@angular/core';
-import { createClient } from '@supabase/supabase-js';
-import { environment } from '../../../environments/environment';
+import { inject, Service } from '@angular/core';
+import { UserAttributes } from '@supabase/supabase-js';
+import { Supabase } from '../../utils/supabase';
 
 @Service()
 export class AuthService {
-  supabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
-
+  supabaseUtil = inject(Supabase);
+  supabase = this.supabaseUtil.supabase;
   async login(email: string, password: string) {
     return await this.supabase.auth.signInWithPassword({ email, password });
   }
@@ -14,11 +14,19 @@ export class AuthService {
     return await this.supabase.auth.signUp({
       email,
       password,
-      options: { data: { role: 'user', display_name: name } },
+      options: { data: { display_name: name } },
     });
+  }
+
+  async update(user: Partial<UserAttributes>) {
+    return await this.supabase.auth.updateUser(user);
   }
 
   async getUser() {
     return this.supabase.auth.getUser();
+  }
+
+  async logout() {
+    return await this.supabase.auth.signOut();
   }
 }
