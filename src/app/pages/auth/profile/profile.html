@@ -1,11 +1,9 @@
 <div class="min-h-screen bg-gray-50">
   @if (authStore.user(); as user) {
     <div class="max-w-5xl mx-auto px-4 py-10">
-      <!-- Profile Header Card -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 mb-6 overflow-hidden">
         <div class="p-6 sm:p-8">
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <!-- Avatar -->
             <div class="relative shrink-0">
               @if (user.user_metadata?.['avatar_url']) {
                 <img
@@ -38,7 +36,6 @@
               }
             </div>
 
-            <!-- Name, Email, Location -->
             <div class="flex-1 min-w-0">
               <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
                 <h1 class="text-xl font-bold text-gray-900 tracking-tight">
@@ -82,7 +79,6 @@
               }
             </div>
 
-            <!-- Edit Action -->
             <a
               routerLink="/auth/update-profile"
               class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shrink-0"
@@ -93,7 +89,6 @@
           </div>
         </div>
 
-        <!-- Quick Stats Row -->
         <div class="border-t border-gray-100 bg-gray-50/50 px-6 sm:px-8 py-4">
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
@@ -126,9 +121,7 @@
         </div>
       </div>
 
-      <!-- Grid: Detail & Verifikasi/Timeline -->
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <!-- Detail Akun (3 kolom) -->
         <div
           class="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden"
         >
@@ -139,7 +132,6 @@
             </h2>
           </div>
           <div class="divide-y divide-gray-100">
-            <!-- ID Pengguna -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 mt-0.5"
@@ -156,7 +148,6 @@
               </div>
             </div>
 
-            <!-- Email -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5"
@@ -169,7 +160,6 @@
               </div>
             </div>
 
-            <!-- No. Telepon -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0 mt-0.5"
@@ -182,7 +172,6 @@
               </div>
             </div>
 
-            <!-- Tanggal Lahir -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center shrink-0 mt-0.5"
@@ -197,7 +186,6 @@
               </div>
             </div>
 
-            <!-- Jenis Kelamin -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5"
@@ -212,7 +200,6 @@
               </div>
             </div>
 
-            <!-- Website -->
             <div class="px-6 py-4 flex items-start gap-3">
               <div
                 class="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center shrink-0 mt-0.5"
@@ -238,9 +225,7 @@
           </div>
         </div>
 
-        <!-- Sidebar: Verifikasi & Timeline (2 kolom) -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- Verifikasi -->
           <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100">
               <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
@@ -249,7 +234,6 @@
               </h2>
             </div>
             <div class="p-4 space-y-3">
-              <!-- Email Verification -->
               <div
                 class="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 border border-gray-100"
               >
@@ -289,7 +273,6 @@
                 }
               </div>
 
-              <!-- Phone Verification -->
               <div
                 class="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 border border-gray-100"
               >
@@ -333,7 +316,6 @@
             </div>
           </div>
 
-          <!-- Aktivitas Akun -->
           <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100">
               <h2 class="text-base font-semibold text-gray-900 flex items-center gap-2">
@@ -343,7 +325,7 @@
             </div>
             <div class="p-6">
               <div class="relative">
-                <div class="absolute left-[15px] top-2 bottom-2 w-px bg-gray-200"></div>
+                <div class="absolute left-3.75 top-2 bottom-2 w-px bg-gray-200"></div>
 
                 <div class="space-y-5">
                   <div class="relative pl-9">
@@ -395,7 +377,6 @@
       </div>
     </div>
   } @else {
-    <!-- Skeleton Loader -->
     <div class="max-w-5xl mx-auto px-4 py-10">
       <div class="bg-white rounded-2xl border border-gray-200/80 p-8">
         <div class="animate-pulse space-y-6">

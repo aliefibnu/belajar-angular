@@ -18,7 +18,6 @@ export class FormUtil {
         });
       }
     });
-    //   return errors;
     return new Promise((resolve, reject) => {
       if (errors.length) reject(errors);
       resolve(null);
