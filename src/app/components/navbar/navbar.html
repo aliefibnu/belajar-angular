@@ -4,19 +4,22 @@
 
     <div class="flex gap-1">
       @for (route of routes; track $index) {
-        @if (route != 'Auth') {
-          <a
-            [routerLink]="route.toLowerCase()"
-            routerLinkActive="bg-indigo-50 text-indigo-700"
-            [routerLinkActiveOptions]="{ exact: route == '' }"
-            class="px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors font-medium"
-          >
-            {{ route || 'Home' }}
-          </a>
-        } @else {
-          <app-auth-menu />
-        }
+        <a
+          [routerLink]="route.toLowerCase()"
+          routerLinkActive="bg-indigo-50 text-indigo-700"
+          [routerLinkActiveOptions]="{ exact: route == '' }"
+          [className]="
+            (!unguardedRootRoutes.map((link) => link.slice(1)).includes(route.toLowerCase()) &&
+            !user()
+              ? 'text-red-600'
+              : 'text-gray-600') +
+            ' px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium'
+          "
+        >
+          {{ route || 'Home' }}
+        </a>
       }
+      <app-auth-menu />
     </div>
   </div>
 </nav>

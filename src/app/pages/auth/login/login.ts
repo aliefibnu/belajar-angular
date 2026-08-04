@@ -44,8 +44,8 @@ export class LoginPage {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      email: ['aliefreal@aliefreal.com', [Validators.required, Validators.email]],
+      password: ['aliefreal@aliefreal.com', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false],
     });
   }

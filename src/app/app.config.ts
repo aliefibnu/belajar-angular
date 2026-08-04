@@ -1,7 +1,7 @@
 import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import localeId from '@angular/common/locales/id';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import { routes } from './routes/app.routes';
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { apiInterceptors } from './interceptors/api.interceptors';

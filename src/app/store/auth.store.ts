@@ -19,6 +19,8 @@ export class AuthStore {
       this.user.set(data.user);
     } catch (error) {
       Notify.failure(error + '');
+    } finally {
+      this.loaded.set(true);
     }
   }
 
@@ -39,6 +41,8 @@ export class AuthStore {
       Notify.success('Berhasil keluar dari akun.');
     } catch (error) {
       Notify.failure('Gagal keluar dari akun.');
+    } finally {
+      this.loaded.set(true);
     }
   }
 }

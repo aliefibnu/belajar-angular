@@ -26,7 +26,7 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { AuthStore } from '../../../store/auth.store';
 import { FormUtil } from '../../../utils/form.util';
 import { Supabase } from '../../../utils/supabase';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { Loader } from '../../../components/loader/loader';
 
 @Component({
@@ -165,7 +165,7 @@ export class UpdateProfilePage {
         data,
       });
       this.authStore.refetch();
-      this.router.navigate(['auth/profile']);
+      this.router.navigate(['user/profile']);
       Notify.success('Berhasil Update Profile');
     } catch (errs) {
       return this.profileForm.markAllAsTouched();
